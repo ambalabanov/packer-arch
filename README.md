@@ -65,8 +65,14 @@ Then you can import the generated box into Vagrant:
 
 Assuming that you already have Packer,
 [Parallels](http://www.parallels.com/), [Parallels SDK](http://www.parallels.com/eu/products/desktop/download/) and
-Vagrant with the Parallels provider installed, you should be good to clone
-this repo and go:
+Vagrant with the Parallels provider installed:
+
+    $ brew tap hashicorp/tap
+    $ brew install vagrant
+    $ brew install hashicorp/tap/packer
+    $ vagrant plugin install vagrant-parallels  
+
+Сlone this repo and go:
 
     $ git clone https://github.com/ambalabanov/packer-arch.git
     $ cd packer-arch/
