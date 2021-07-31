@@ -22,17 +22,8 @@ COUNTRY=${COUNTRY:-RU}
 MIRRORLIST="https://archlinux.org/mirrorlist/?country=${COUNTRY}&protocol=http&protocol=https&ip_version=4&use_mirror_status=on"
 
 echo ">>>> install-base.sh: Clearing partition table on ${DISK}.."
-/usr/bin/sgdisk --zap ${DISK}
-
-echo ">>>> install-base.sh: Destroying magic strings and signatures on ${DISK}.."
-/usr/bin/dd if=/dev/zero of=${DISK} bs=512 count=2048
-/usr/bin/wipefs --all ${DISK}
-
-echo ">>>> install-base.sh: Creating /root partition on ${DISK}.."
-/usr/bin/sgdisk --new=1:0:0 ${DISK}
-
-echo ">>>> install-base.sh: Setting ${DISK} bootable.."
-/usr/bin/sgdisk ${DISK} --attributes=1:set:2
+parted ${DISK} mklabel msdos mkpart primary ext4 1MiB 100%
+parted ${DISK} set 1 boot on
 
 echo ">>>> install-base.sh: Creating /root filesystem (ext4).."
 /usr/bin/mkfs.ext4 -O ^64bit -F -m 0 -q -L root ${ROOT_PARTITION}
