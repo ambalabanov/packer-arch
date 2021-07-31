@@ -5,7 +5,8 @@
         "ssh_timeout": "20m",
         "country": "RU",
         "write_zeros": "false",
-        "headless": "false"
+        "headless": "false",
+        "blackarch": "true"
     },
     "builders": [
         {
@@ -127,6 +128,11 @@
             "type": "shell",
             "execute_command": "{{ .Vars }} sudo -E -S bash '{{ .Path }}'",
             "script": "scripts/install-vmware.sh"
+        },
+        {
+            "type": "shell",
+            "execute_command": "{{ .Vars }} BLACKARCH={{ user `blackarch` }} sudo -E -S bash '{{ .Path }}'",
+            "script": "scripts/blackarch.sh"
         },
         {
             "type": "shell",
