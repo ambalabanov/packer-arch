@@ -12,8 +12,8 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "packer-arch"
-  config.vm.define 'test'
+  config.vm.box = "ambalabanov/archlinux"
+  # config.vm.box_version = "0.1.0"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -38,13 +38,14 @@ Vagrant.configure("2") do |config|
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
-  config.vm.network "public_network"
+  # config.vm.network "public_network"
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder "~/Downloads", "/home/vagrant/Downloads"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -60,12 +61,20 @@ Vagrant.configure("2") do |config|
   #
   # View the documentation for the provider you are using for more
   # information on available options.
-
+  config.vm.provider "parallels" do |prl|
+    prl.name = "archlinux-vagrant"
+    prl.linked_clone = false
+  end
   # Enable provisioning with a shell script. Additional provisioners such as
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+  config.vm.provision "file", source: "srv/root.crt", destination: "~/root.crt"
+  config.vm.provision "shell", inline: <<-SHELL
+    trust anchor root.crt
+    pacman -Sy gnome gnome-extra gdm gnome-tweaks networkmanager networkmanager-openvpn --noconfirm --needed
+    systemctl enable --now  gdm.service
+    systemctl enable --now  NetworkManager.service
+    systemctl isolate graphical.target
+  SHELL
+
 end
