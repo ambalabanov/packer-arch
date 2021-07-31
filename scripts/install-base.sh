@@ -73,11 +73,6 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
   /usr/bin/sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config
   /usr/bin/systemctl enable sshd.service
 
-  # Workaround for https://bugs.archlinux.org/task/58355 which prevents sshd to accept connections after reboot
-  echo ">>>> ${CONFIG_SCRIPT_SHORT}: Adding workaround for sshd connection issue after reboot.."
-  /usr/bin/pacman -S --noconfirm rng-tools
-  /usr/bin/systemctl enable rngd
-
   # Vagrant-specific configuration
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Creating vagrant user.."
   /usr/bin/useradd --comment 'Vagrant User' --create-home --user-group vagrant
@@ -102,5 +97,5 @@ rm "${TARGET_DIR}${CONFIG_SCRIPT}"
 echo ">>>> install-base.sh: Completing installation.."
 /usr/bin/sleep 3
 /usr/bin/umount ${TARGET_DIR}
+/usr/bin/sleep 3
 /usr/bin/systemctl reboot
-echo ">>>> install-base.sh: Installation complete!"
