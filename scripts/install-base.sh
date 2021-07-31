@@ -60,6 +60,7 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
   /usr/bin/sed -i 's/#${LANGUAGE}/${LANGUAGE}/' /etc/locale.gen
   /usr/bin/sed -i 's/#${LANGUAGE2}/${LANGUAGE2}/' /etc/locale.gen
   /usr/bin/locale-gen
+  echo "LANG=en_US.UTF-8" >> /etc/locale.conf
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Creating initramfs.."
   /usr/bin/mkinitcpio -p linux-lts
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Setting root pasword.."
