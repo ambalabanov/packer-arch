@@ -76,7 +76,7 @@ Vagrant with the Parallels provider installed:
 
     $ git clone https://github.com/ambalabanov/packer-arch.git
     $ cd packer-arch/
-    $ packer build -only=parallels-iso arch-template.json
+    $ PACKER_LOG=1 packer build -only=parallels-iso arch-template.json
 
 Then you can import the generated box into Vagrant:
 
