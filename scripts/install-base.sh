@@ -87,12 +87,11 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
   /usr/bin/chmod 0440 /etc/sudoers.d/10_vagrant
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring ssh access for vagrant.."
   /usr/bin/install --directory --owner=vagrant --group=vagrant --mode=0700 /home/vagrant/.ssh
-  /usr/bin/curl --output /home/vagrant/.ssh/authorized_keys --location https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub
+  /usr/bin/curl -k --output /home/vagrant/.ssh/authorized_keys --location https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
   /usr/bin/chown vagrant:vagrant /home/vagrant/.ssh/authorized_keys
   /usr/bin/chmod 0600 /home/vagrant/.ssh/authorized_keys
-
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Cleaning up.."
-  /usr/bin/pacman -Rcns --noconfirm gptfdisk
+  /usr/bin/pacman -Scc --noconfirm
 EOF
 
 echo ">>>> install-base.sh: Entering chroot and configuring system.."
@@ -102,9 +101,5 @@ rm "${TARGET_DIR}${CONFIG_SCRIPT}"
 echo ">>>> install-base.sh: Completing installation.."
 /usr/bin/sleep 3
 /usr/bin/umount ${TARGET_DIR}
-# Turning network interfaces down to make sure SSH session was dropped on host.
-# More info at: https://www.packer.io/docs/provisioners/shell.html#handling-reboots
-echo '==> Turning down network interfaces and rebooting'
-for i in $(/usr/bin/netstat -i | /usr/bin/tail +3 | /usr/bin/awk '{print $1}'); do /usr/bin/ip link set ${i} down; done
 /usr/bin/systemctl reboot
 echo ">>>> install-base.sh: Installation complete!"

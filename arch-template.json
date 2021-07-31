@@ -22,9 +22,9 @@
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/enable-ssh.sh<enter><wait5>",
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
-            "cpus": 1,
-            "memory": 768,
-            "disk_size": 20480,
+            "cpus": 2,
+            "memory": 2048,
+            "disk_size": 65536,
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
@@ -54,7 +54,7 @@
             ],
             "cpus": 1,
             "memory": 768,
-            "disk_size": 20480,
+            "disk_size": 65536,
             "hard_drive_interface": "sata",
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
@@ -73,9 +73,9 @@
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/enable-ssh.sh<enter><wait5>",
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
-            "cpus": 1,
-            "memory": 768,
-            "disk_size": 20480,
+            "cpus": 2,
+            "memory": 2048,
+            "disk_size": 65536,
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
@@ -93,9 +93,9 @@
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/enable-ssh.sh<enter><wait5>",
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
-            "cpus": 1,
-            "memory": 768,
-            "disk_size": 20480,
+            "cpus": 2,
+            "memory": 2048,
+            "disk_size": 65536,
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
@@ -137,7 +137,7 @@
     "post-processors": [
         {
             "type": "vagrant",
-            "output": "output/packer_arch_{{ .Provider }}-{{isotime \"2006.01\"}}.01.box"
+            "output": "output/packer_arch_{{ .Provider }}.box"
         }
     ]
 }
