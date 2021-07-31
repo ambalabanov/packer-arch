@@ -38,7 +38,11 @@ echo ">>>> install-base.sh: Bootstrapping the base installation.."
 /usr/bin/pacstrap ${TARGET_DIR} base linux-lts grub openssh sudo
 
 echo ">>>> install-base.sh: Generating the filesystem table.."
-/usr/bin/genfstab -p ${TARGET_DIR} >> "${TARGET_DIR}/etc/fstab"
+/usr/bin/genfstab -pU ${TARGET_DIR} >> "${TARGET_DIR}/etc/fstab"
+
+echo ">>>> install-base.sh: Network configuring.."
+cp -L /etc/resolv.conf ${TARGET_DIR}/etc
+cp /etc/systemd/network/* ${TARGET_DIR}/etc/systemd/network
 
 echo ">>>> install-base.sh: Generating the system configuration script.."
 /usr/bin/install --mode=0755 /dev/null "${TARGET_DIR}${CONFIG_SCRIPT}"
@@ -61,10 +65,9 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Setting root pasword.."
   /usr/bin/usermod --password ${PASSWORD} root
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring network.."
-  # Disable systemd Predictable Network Interface Names and revert to traditional interface names
-  # https://wiki.archlinux.org/index.php/Network_configuration#Revert_to_traditional_interface_names
-  /usr/bin/ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
-  /usr/bin/systemctl enable dhcpcd@eth0.service
+  /usr/bin/systemctl enable systemd-networkd.service
+  /usr/bin/systemctl enable systemd-resolved.service
+  sed -i '/^\[DHCPv4\]/a ClientIdentifier=mac' /etc/systemd/network/20-ethernet.network
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring sshd.."
   /usr/bin/sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config
   /usr/bin/systemctl enable sshd.service
