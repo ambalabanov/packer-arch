@@ -99,10 +99,6 @@ echo ">>>> install-base.sh: Entering chroot and configuring system.."
 /usr/bin/arch-chroot ${TARGET_DIR} ${CONFIG_SCRIPT}
 rm "${TARGET_DIR}${CONFIG_SCRIPT}"
 
-# http://comments.gmane.org/gmane.linux.arch.general/48739
-echo ">>>> install-base.sh: Adding workaround for shutdown race condition.."
-/usr/bin/install --mode=0644 /root/poweroff.timer "${TARGET_DIR}/etc/systemd/system/poweroff.timer"
-
 echo ">>>> install-base.sh: Completing installation.."
 /usr/bin/sleep 3
 /usr/bin/umount ${TARGET_DIR}

@@ -18,9 +18,8 @@
             "http_directory": "srv",
             "boot_wait": "5s",
             "boot_command": [
-                "<enter><wait10><wait10><wait10><wait10>",
+                "<enter><wait10><wait10><wait10>",
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/enable-ssh.sh<enter><wait5>",
-                "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/poweroff.timer<enter><wait5>",
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
             "cpus": 1,
@@ -29,8 +28,17 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
-            "shutdown_command": "sudo systemctl start poweroff.timer"
+            "shutdown_command": "echo 'packer' | sudo -S shutdown -P now"
         },
+        {
+            "type": "parallels-pvm",
+            "parallels_tools_flavor": "lin",
+            "source_path": "archlinux.pvm",
+            "ssh_username": "vagrant",
+            "ssh_password": "vagrant",
+            "ssh_timeout": "{{ user `ssh_timeout` }}",
+            "shutdown_command": "echo 'packer' | sudo -S shutdown -P now"
+        },  
         {
             "type": "virtualbox-iso",
             "iso_url": "{{ user `iso_url` }}",
@@ -40,9 +48,8 @@
             "http_directory": "srv",
             "boot_wait": "5s",
             "boot_command": [
-                "<enter><wait10><wait10><wait10><wait10>",
+                "<enter><wait10><wait10><wait10>",
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/enable-ssh.sh<enter><wait5>",
-                "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/poweroff.timer<enter><wait5>",
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
             "cpus": 1,
@@ -52,7 +59,7 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
-            "shutdown_command": "sudo systemctl start poweroff.timer",
+            "shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
             "headless": "{{ user `headless`}}"
         },
         {
@@ -62,9 +69,8 @@
             "http_directory": "srv",
             "boot_wait": "5s",
             "boot_command": [
-                "<enter><wait10><wait10><wait10><wait10>",
+                "<enter><wait10><wait10><wait10>",
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/enable-ssh.sh<enter><wait5>",
-                "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/poweroff.timer<enter><wait5>",
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
             "cpus": 1,
@@ -73,7 +79,7 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
-            "shutdown_command": "sudo systemctl start poweroff.timer",
+            "shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
             "headless": "{{ user `headless`}}"
         },
         {
@@ -83,9 +89,8 @@
             "http_directory": "srv",
             "boot_wait": "5s",
             "boot_command": [
-                "<enter><wait10><wait10><wait10><wait10>",
+                "<enter><wait10><wait10><wait10>",
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/enable-ssh.sh<enter><wait5>",
-                "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/poweroff.timer<enter><wait5>",
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
             "cpus": 1,
@@ -94,7 +99,7 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
-            "shutdown_command": "sudo systemctl start poweroff.timer",
+            "shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
             "headless": "{{ user `headless`}}"
         }
     ],
