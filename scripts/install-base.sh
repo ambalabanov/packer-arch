@@ -35,17 +35,7 @@ echo ">>>> install-base.sh: Setting pacman ${COUNTRY} mirrors.."
 curl -s "$MIRRORLIST" |  sed 's/^#Server/Server/' > /etc/pacman.d/mirrorlist
 
 echo ">>>> install-base.sh: Bootstrapping the base installation.."
-/usr/bin/pacstrap ${TARGET_DIR} base base-devel linux
-
-# Need to install netctl as well: https://github.com/archlinux/arch-boxes/issues/70
-# Can be removed when Vagrant's Arch plugin will use systemd-networkd: https://github.com/hashicorp/vagrant/pull/11400
-echo ">>>> install-base.sh: Installing basic packages.."
-/usr/bin/arch-chroot ${TARGET_DIR} pacman -S --noconfirm gptfdisk openssh syslinux dhcpcd netctl
-
-echo ">>>> install-base.sh: Configuring syslinux.."
-/usr/bin/arch-chroot ${TARGET_DIR} syslinux-install_update -i -a -m
-/usr/bin/sed -i "s|sda3|${ROOT_PARTITION##/dev/}|" "${TARGET_DIR}/boot/syslinux/syslinux.cfg"
-/usr/bin/sed -i 's/TIMEOUT 50/TIMEOUT 10/' "${TARGET_DIR}/boot/syslinux/syslinux.cfg"
+/usr/bin/pacstrap ${TARGET_DIR} base linux-lts grub openssh sudo
 
 echo ">>>> install-base.sh: Generating the filesystem table.."
 /usr/bin/genfstab -p ${TARGET_DIR} >> "${TARGET_DIR}/etc/fstab"
@@ -55,6 +45,9 @@ echo ">>>> install-base.sh: Generating the system configuration script.."
 
 CONFIG_SCRIPT_SHORT=`basename "$CONFIG_SCRIPT"`
 cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
+  echo ">>>> ${CONFIG_SCRIPT_SHORT}: Install GRUB.."
+  grub-install ${DISK}
+  grub-mkconfig -o /boot/grub/grub.cfg
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring hostname, timezone, and keymap.."
   echo '${FQDN}' > /etc/hostname
   /usr/bin/ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
@@ -64,7 +57,7 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
   /usr/bin/sed -i 's/#${LANGUAGE2}/${LANGUAGE2}/' /etc/locale.gen
   /usr/bin/locale-gen
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Creating initramfs.."
-  /usr/bin/mkinitcpio -p linux
+  /usr/bin/mkinitcpio -p linux-lts
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Setting root pasword.."
   /usr/bin/usermod --password ${PASSWORD} root
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring network.."
