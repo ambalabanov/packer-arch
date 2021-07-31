@@ -3,7 +3,8 @@
 PASSWORD=$(/usr/bin/openssl passwd -6 'vagrant')
 
 # Vagrant-specific configuration
-/usr/bin/useradd --password ${PASSWORD} --comment 'Vagrant User' --create-home --user-group vagrant
+/usr/bin/useradd --comment 'Vagrant User' --create-home --user-group vagrant
+echo "vagrant:vagrant" | chpasswd
 echo 'Defaults env_keep += "SSH_AUTH_SOCK"' > /etc/sudoers.d/10_vagrant
 echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers.d/10_vagrant
 /usr/bin/chmod 0440 /etc/sudoers.d/10_vagrant

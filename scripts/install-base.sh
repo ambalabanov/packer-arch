@@ -63,7 +63,7 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Creating initramfs.."
   /usr/bin/mkinitcpio -p linux-lts
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Setting root pasword.."
-  /usr/bin/usermod --password ${PASSWORD} root
+  echo "root:vagrant" | chpasswd
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring network.."
   /usr/bin/systemctl enable systemd-networkd.service
   /usr/bin/systemctl enable systemd-resolved.service
@@ -79,7 +79,8 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 
   # Vagrant-specific configuration
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Creating vagrant user.."
-  /usr/bin/useradd --password ${PASSWORD} --comment 'Vagrant User' --create-home --user-group vagrant
+  /usr/bin/useradd --comment 'Vagrant User' --create-home --user-group vagrant
+  echo "vagrant:vagrant" | chpasswd
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring sudo.."
   echo 'Defaults env_keep += "SSH_AUTH_SOCK"' > /etc/sudoers.d/10_vagrant
   echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers.d/10_vagrant
