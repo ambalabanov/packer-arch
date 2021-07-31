@@ -12,13 +12,13 @@ fi
 FQDN='vagrant-arch.vagrantup.com'
 KEYMAP='us'
 LANGUAGE='en_US.UTF-8'
-PASSWORD=$(/usr/bin/openssl passwd -crypt 'vagrant')
+LANGUAGE2='ru_RU.UTF-8'
 TIMEZONE='UTC'
 
 CONFIG_SCRIPT='/usr/local/bin/arch-config.sh'
 ROOT_PARTITION="${DISK}1"
 TARGET_DIR='/mnt'
-COUNTRY=${COUNTRY:-US}
+COUNTRY=${COUNTRY:-RU}
 MIRRORLIST="https://archlinux.org/mirrorlist/?country=${COUNTRY}&protocol=http&protocol=https&ip_version=4&use_mirror_status=on"
 
 echo ">>>> install-base.sh: Clearing partition table on ${DISK}.."
@@ -70,6 +70,7 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
   echo 'KEYMAP=${KEYMAP}' > /etc/vconsole.conf
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring locale.."
   /usr/bin/sed -i 's/#${LANGUAGE}/${LANGUAGE}/' /etc/locale.gen
+  /usr/bin/sed -i 's/#${LANGUAGE2}/${LANGUAGE2}/' /etc/locale.gen
   /usr/bin/locale-gen
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Creating initramfs.."
   /usr/bin/mkinitcpio -p linux

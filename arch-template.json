@@ -3,8 +3,8 @@
         "iso_url": "https://mirrors.kernel.org/archlinux/iso/2021.07.01/archlinux-2021.07.01-x86_64.iso",
         "iso_checksum_url": "https://mirrors.kernel.org/archlinux/iso/2021.07.01/sha1sums.txt",
         "ssh_timeout": "20m",
-        "country": "US",
-        "write_zeros": "true",
+        "country": "RU",
+        "write_zeros": "false",
         "headless": "false"
     },
     "builders": [
