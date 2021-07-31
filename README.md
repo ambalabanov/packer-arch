@@ -68,13 +68,17 @@ Assuming that you already have Packer,
 Vagrant with the Parallels provider installed, you should be good to clone
 this repo and go:
 
-    $ git clone https://github.com/elasticdog/packer-arch.git
+    $ git clone https://github.com/ambalabanov/packer-arch.git
     $ cd packer-arch/
     $ packer build -only=parallels-iso arch-template.json
 
 Then you can import the generated box into Vagrant:
 
-    $ vagrant box add arch output/packer_arch_parallels.box
+    $ vagrant box add  --name ambalabanov/archlinux output/packer_arch_parallels.box 
+
+And start box:
+
+    $ vagrant up
 
 ### libvirt Provider
 
